@@ -77,16 +77,16 @@ public class EthPort : MonoBehaviour
     void OnMouseDown() 
     {
 
-        if (!isOn)
-        {
-            // Wire.gameObject.SetActive(false);
-            TurnPortOn();
-        }
-        else
-        {
-            // Wire.gameObject.SetActive(true);
-            TurnPortOff();
-        }
+        // if (!isOn)
+        // {
+        //     // Wire.gameObject.SetActive(false);
+        //     TurnPortOn();
+        // }
+        // else
+        // {
+        //     // Wire.gameObject.SetActive(true);
+        //     TurnPortOff();
+        // }
     }
 
 

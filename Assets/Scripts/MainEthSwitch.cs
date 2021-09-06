@@ -17,6 +17,11 @@ public class MainEthSwitch : MonoBehaviour
 
     public bool isMainPowerOn;
 
+
+    EthSwitchCanvas CanvasScript;
+
+
+
     void Awake() 
     {
         // print("main device awake Called");
@@ -38,30 +43,36 @@ public class MainEthSwitch : MonoBehaviour
 
             }
         }
-
-
     }
 
     void Start()
     { 
         // print("main device Start Called");
 
-        isMainPowerOn = true;    
+        isMainPowerOn = true;
 
+        CanvasScript = GameObject.FindGameObjectWithTag("EthSwitchCanvas").GetComponent<EthSwitchCanvas>();
+    }
+    
+    
+    void Update() 
+    {
 
     }
     
     
-
-
-
     void OnMouseDown() 
     {
-        
+        if(GameObject.FindGameObjectWithTag("Popup"))return;
 
-        ToggleMainEthDevice();
-  
+        CanvasScript.LoadPanel(AllAreaNode);
+        CanvasScript.ShowPanel();
+        CanvasScript.ButtonPressEvent = ToggleMainEthDevice;
+        // ToggleMainEthDevice();
+
     }
+
+
 
 
 

@@ -17,6 +17,8 @@ public class AreaNode : MonoBehaviour
     public List<LineRenderer> AllWires = new List<LineRenderer>();
 
 
+    EthSwitchCanvas CanvasScript;
+
 
 
     public bool isOn;
@@ -26,6 +28,9 @@ public class AreaNode : MonoBehaviour
     {
         // isOn = true;
         // print("Area Node Start Called");
+
+        CanvasScript = GameObject.FindGameObjectWithTag("EthSwitchCanvas").GetComponent<EthSwitchCanvas>();
+
 
         // get the main switch
         MainDevice = GameObject.FindGameObjectWithTag("MainEthSwitch").GetComponent<MainEthSwitch>();
@@ -141,10 +146,24 @@ public class AreaNode : MonoBehaviour
     }
 
 
+
     void OnMouseDown() 
     {
-        if (!MainDevice.isMainPowerOn) return;
+        // if (!MainDevice.isMainPowerOn) return;
         
+        if(GameObject.FindGameObjectWithTag("Popup"))return;
+        
+        CanvasScript.ShowPanel();
+        CanvasScript.LoadPanel(AllChildBuildingNodes);
+
+        // add delegate
+        CanvasScript.ButtonPressEvent = ToggleNode;
+
+    }
+
+
+    void ToggleNode()
+    {
         if (isOn)
         {
             TurnOff();
@@ -153,9 +172,7 @@ public class AreaNode : MonoBehaviour
         {
             TurnOn();
         }
-
     }
-
 
 
     public void UpdateAreaNode()

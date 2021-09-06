@@ -21,6 +21,7 @@ public class BuildingNode : MonoBehaviour
     public List<LineRenderer> AllWires = new List<LineRenderer>();
 
 
+    EthSwitchCanvas CanvasScript;
 
     public bool isOn;
 
@@ -28,6 +29,7 @@ public class BuildingNode : MonoBehaviour
     void Start()
     {
         // isOn = true;
+        CanvasScript = GameObject.FindGameObjectWithTag("EthSwitchCanvas").GetComponent<EthSwitchCanvas>();
 
         // get the main switch
         MainDevice = GameObject.FindGameObjectWithTag("MainEthSwitch").GetComponent<MainEthSwitch>();
@@ -45,8 +47,12 @@ public class BuildingNode : MonoBehaviour
 
                 AllChildFloorNodes.Add(child.gameObject);
                 
-                // // set the parent node in child
-                child.gameObject.GetComponent<FloorNode>().ParentBuildingNode = GetComponent<BuildingNode>();
+                // set the parent node in child
+                // child.gameObject.GetComponent<FloorNode>().ParentBuildingNode = GetComponent<BuildingNode>();
+
+                child.GetComponent<FloorNode>().ParentBuildingNode = this;
+
+
                 // ParentDevice.AllBuildingNode.Add(child.gameObject);
 
             }
@@ -72,18 +78,32 @@ public class BuildingNode : MonoBehaviour
 
 
         AllWires.Add(Wire);
-
-
-
-        // target.GetComponent<BuildingNode>().ConnectedWire = Wire;
     
     }
 
 
+    public void TurnOnNode()
+    {
+        GetComponent<Renderer>().material = OnMaterial;
+
+        if (isOn) return;
+        isOn = true;
+
+    }
+
+
+    public void TurnOffNode()
+    {
+        GetComponent<Renderer>().material = OffMaterial;
+
+        if (!isOn)return;
+        isOn = false;
+    }
+    
 
     public void TurnOff()
     {
-        GetComponent<Renderer>().material = OffMaterial;
+        TurnOffNode();
         
         foreach (var item in AllChildFloorNodes)
         {
@@ -95,16 +115,13 @@ public class BuildingNode : MonoBehaviour
         {
             item.GetComponent<EthWire>().SetOffMaterial();
         }
-
-
-        if (!isOn)return;
-        isOn = false;
     }
+
 
     public void TurnOn()
     {
 
-        GetComponent<Renderer>().material = OnMaterial;
+        TurnOnNode();
 
         foreach (var item in AllChildFloorNodes)
         {
@@ -112,25 +129,37 @@ public class BuildingNode : MonoBehaviour
         }
 
 
-
         foreach (var item in AllWires)
         {
             item.GetComponent<EthWire>().SetOnMaterial();
         }
 
-
-
-        if (isOn) return;
-        isOn = true;
     }
 
 
     void OnMouseDown() 
     {
         // if (!ParentAreaNode.isOn) return;
+        
+        if(GameObject.FindGameObjectWithTag("Popup"))return;
+        
+        CanvasScript.ShowPanel();
+        CanvasScript.LoadPanel(AllChildFloorNodes);
+
+        // add delegate
+        CanvasScript.ButtonPressEvent = ToggleNode;
 
 
         // print(ParentAreaNode);
+
+
+
+        // ParentAreaNode.UpdateAreaNode();
+    }
+
+
+    void ToggleNode()
+    {
 
         if (isOn)
         {
@@ -141,13 +170,9 @@ public class BuildingNode : MonoBehaviour
         {
             TurnOn();
             ConnectedToParentWire.GetComponent<EthWire>().SetOnMaterial();
-            ParentAreaNode.TurnOnNode();
+            if (!ParentAreaNode.isOn) ParentAreaNode.TurnOnNode();
         }
-
-
-        ParentAreaNode.UpdateAreaNode();
     }
-
 
 
     public void UpdateBuildingNode()
@@ -164,9 +189,8 @@ public class BuildingNode : MonoBehaviour
 
         if (OffCount == AllChildFloorNodes.Count)
         {
-            TurnOff();
+            TurnOffNode();
         }
+ 
     }
-
-
 }

@@ -11,7 +11,7 @@ public class FloorNode : MonoBehaviour
 
     public BuildingNode ParentBuildingNode;
 
-    public List<GameObject> AllChildNodes;
+    // public List<GameObject> AllChildNodes;
 
 
     public LineRenderer ConnectedToParentWire;
@@ -23,22 +23,28 @@ public class FloorNode : MonoBehaviour
     
     void Start()
     {
-        
+
     }
 
 
 
     void OnMouseDown() 
     {
-        if (!ParentBuildingNode.isOn)return;
-        
+        // if (!ParentBuildingNode.isOn)return;
+
+        // print(ParentBuildingNode);
         if (isOn)
         {
             TurnOff();
+            ParentBuildingNode.UpdateBuildingNode();
+
+
         }
         else
         {
             TurnOn();
+
+            if (!ParentBuildingNode.isOn) ParentBuildingNode.TurnOnNode();
         }
     
     }
@@ -56,7 +62,7 @@ public class FloorNode : MonoBehaviour
 
         if (isOn) return;
         isOn = true;
-    
+
     }
 
     public void TurnOff()
@@ -68,8 +74,7 @@ public class FloorNode : MonoBehaviour
 
         if (!isOn) return;
         isOn = false;
-
-        // ParentBuildingNode.UpdateBuildingNode();
-
     }
+
+
 }
