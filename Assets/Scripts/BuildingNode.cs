@@ -70,7 +70,7 @@ public class BuildingNode : MonoBehaviour
         Wire.SetPosition(Wire.positionCount - 1, target.transform.position);
 
         // add the wire to wire container in world
-        Wire.transform.parent = GameObject.FindGameObjectWithTag("WireContainer").transform;
+        Wire.transform.SetParent(GameObject.FindGameObjectWithTag("WireContainer").transform);
 
 
         // set parent wire for building node
@@ -85,6 +85,10 @@ public class BuildingNode : MonoBehaviour
     public void TurnOnNode()
     {
         GetComponent<Renderer>().material = OnMaterial;
+        
+        ConnectedToParentWire.GetComponent<EthWire>().SetOnMaterial();
+        if (!ParentAreaNode.isOn) ParentAreaNode.TurnOnNode();
+
 
         if (isOn) return;
         isOn = true;
@@ -158,7 +162,7 @@ public class BuildingNode : MonoBehaviour
     }
 
 
-    void ToggleNode()
+    public bool ToggleNode()
     {
 
         if (isOn)
@@ -169,9 +173,10 @@ public class BuildingNode : MonoBehaviour
         else
         {
             TurnOn();
-            ConnectedToParentWire.GetComponent<EthWire>().SetOnMaterial();
-            if (!ParentAreaNode.isOn) ParentAreaNode.TurnOnNode();
+
         }
+
+        return isOn;
     }
 
 

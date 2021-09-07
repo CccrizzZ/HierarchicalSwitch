@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6420411758231199010}
   - component: {fileID: 5023791239387159212}
   - component: {fileID: 2445902688666426921}
+  - component: {fileID: 7527244222009434311}
   m_Layer: 0
   m_Name: BuildingNode
   m_TagString: BuildingNode
@@ -114,4 +115,20 @@ MonoBehaviour:
   MainDevice: {fileID: 0}
   ParentAreaNode: {fileID: 0}
   AllChildFloorNodes: []
+  ConnectedToParentWire: {fileID: 0}
+  AllWires: []
   isOn: 1
+--- !u!114 &7527244222009434311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238167898867910940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a553c0e9ff10545b0410df2959f6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EthIndicatorPrefab: {fileID: 336213320062075153, guid: 5744cd263e263b24baf840c15dc4a805,
+    type: 3}

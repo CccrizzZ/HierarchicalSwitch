@@ -45,6 +45,7 @@ public class MainEthSwitch : MonoBehaviour
         }
     }
 
+
     void Start()
     { 
         // print("main device Start Called");
@@ -76,7 +77,7 @@ public class MainEthSwitch : MonoBehaviour
 
 
 
-    void ToggleMainEthDevice()
+    bool ToggleMainEthDevice()
     {
         if (isMainPowerOn)
         {
@@ -96,6 +97,8 @@ public class MainEthSwitch : MonoBehaviour
                 item.GetComponent<EthPort>().TurnPortOn();
             }
         }
+
+        return isMainPowerOn;
 
     }
 

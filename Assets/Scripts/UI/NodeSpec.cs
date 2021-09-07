@@ -10,11 +10,30 @@ public class NodeSpec : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public string InputName;
     public string InputIP;
 
+    public GameObject TargetNode;
+
     [SerializeField] Text Name;
     [SerializeField] Text IP;
     [SerializeField] Image Background;
     [SerializeField] GameObject HoverIndicator;
+    [SerializeField] GameObject ActiveIndicatorPrefab;
 
+    GameObject ActiveIndicator;
+
+
+
+
+
+
+    public delegate bool boolDelegate();
+    public boolDelegate ToggleCertainNode;
+
+    public void ToggleNodeEvent()
+    {
+        if(ToggleCertainNode == null)return;
+        isOn = ToggleCertainNode();
+
+    }
 
 
     public bool isOn;
@@ -26,14 +45,7 @@ public class NodeSpec : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         Name.text = InputName;
         IP.text = InputIP;
 
-        if (isOn)
-        {
-            SetBgOn();
-        }
-        else
-        {
-            SetBgOff();
-        }
+        UpdateNodeSpec();
     }
 
 
@@ -52,7 +64,8 @@ public class NodeSpec : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerDown(PointerEventData data)
     {
-        
+        ToggleNodeEvent();
+        UpdateNodeSpec();
     }
  
     public void OnPointerUp(PointerEventData data)
@@ -60,16 +73,53 @@ public class NodeSpec : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     }
 
+    
+
     public void OnPointerEnter(PointerEventData data)
     {
         HoverIndicator.SetActive(true);
+     
+     
+
+
+        ActiveIndicator = Instantiate(ActiveIndicatorPrefab);
+        ActiveIndicator.transform.SetParent(transform);
+        // ActiveIndicator.transform.SetParent(this.transform);
+        ActiveIndicator.transform.position = Camera.main.WorldToScreenPoint(TargetNode.transform.position);
+
+        
+        
     }
     
     public void OnPointerExit(PointerEventData data)
     {
         HoverIndicator.SetActive(false);
+ 
+        Destroy(ActiveIndicator);
+
+        
+
+        
 
     }
 
+
+    void OnDestroy() 
+    {
+        ToggleCertainNode -= ToggleCertainNode;
+    }
+
+
+    public void UpdateNodeSpec()
+    {
+        if (isOn)
+        {
+            SetBgOn();
+        }
+        else
+        {
+            SetBgOff();
+        }
+    }
 
 }

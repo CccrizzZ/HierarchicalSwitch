@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EthSwitchCanvas : MonoBehaviour
 {
 
@@ -9,13 +10,26 @@ public class EthSwitchCanvas : MonoBehaviour
     [SerializeField] GameObject NodeSpecPrefab;
     [SerializeField] GameObject NodeSpecPanel;
 
-    public delegate void voidDelegate();
-    public voidDelegate ButtonPressEvent;
+
+
+    public delegate bool boolDelegate();
+    public boolDelegate ButtonPressEvent;
+
+    List<NodeSpec> AllNodeSpec = new List<NodeSpec>();
 
     public void ButtonDownEvent()
     {
         if(ButtonPressEvent == null)return;
-        ButtonPressEvent();
+        if(ButtonPressEvent())
+        {
+            AllNodeSpecOn();
+        }
+        else
+        {
+            AllNodeSpecOff();
+            
+        }
+        // UpdateAllNodeSpec();
     }
 
 
@@ -44,6 +58,10 @@ public class EthSwitchCanvas : MonoBehaviour
         // delete delegate 
         ButtonPressEvent -= ButtonPressEvent;
 
+        Destroy(GameObject.FindGameObjectWithTag("NodeIndicator"));
+
+        if(AllNodeSpec.Count == 0) return;
+        AllNodeSpec.Clear();
     }
 
 
@@ -51,29 +69,37 @@ public class EthSwitchCanvas : MonoBehaviour
     {
 
         var NewNode =  Instantiate(NodeSpecPrefab);
-
         NodeSpec spec = NewNode.GetComponent<NodeSpec>();
+        AllNodeSpec.Add(spec);
+
+        spec.TargetNode = go;
         spec.InputIP = GenerateRandomIP();
 
         if (go.TryGetComponent(out AreaNode A))
         {
             spec.InputName = A.name;
             spec.isOn = A.isOn;
+            spec.ToggleCertainNode = A.ToggleNode;
         }
         else if (go.TryGetComponent(out BuildingNode B))
         {
             spec.InputName = B.name;
             spec.isOn = B.isOn;
+            spec.ToggleCertainNode = B.ToggleNode;
         }
         else if (go.TryGetComponent(out FloorNode F))
         {
             spec.InputName = F.name;
             spec.isOn = F.isOn;
+            spec.ToggleCertainNode = F.ToggleNode;
+            spec.TargetNode = F.transform.GetChild(0).gameObject;
+            // spec.TargetNode = null;
+            
         }
 
 
 
-        NewNode.transform.parent = NodeContainer.transform;
+        NewNode.transform.SetParent(NodeContainer.transform);
 
     }
 
@@ -94,4 +120,31 @@ public class EthSwitchCanvas : MonoBehaviour
     }
 
 
+
+    void UpdateAllNodeSpec()
+    {
+        foreach (var item in AllNodeSpec)
+        {
+            item.UpdateNodeSpec();
+        }
+    }
+    
+
+    void AllNodeSpecOn()
+    {
+        foreach (var item in AllNodeSpec)
+        {
+            item.isOn = true;
+            item.UpdateNodeSpec();
+        }
+    }
+
+    void AllNodeSpecOff()
+    {
+        foreach (var item in AllNodeSpec)
+        {
+            item.isOn = false;
+            item.UpdateNodeSpec();
+        }
+    }
 }

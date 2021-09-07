@@ -170,10 +170,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputName: 
   InputIP: 
+  TargetNode: {fileID: 0}
   Name: {fileID: 5334522844285148282}
   IP: {fileID: 8536536484189564705}
   Background: {fileID: 4366973299096262555}
   HoverIndicator: {fileID: 4345942082030686927}
+  ActiveIndicator: {fileID: 0}
+  ActiveIndicatorPrefab: {fileID: 393931538254775181, guid: 23aeb3fc5d88ae944ab9b4df0fd8102d,
+    type: 3}
   isOn: 0
 --- !u!1 &4345942082030686927
 GameObject:

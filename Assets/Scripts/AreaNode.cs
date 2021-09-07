@@ -77,7 +77,7 @@ public class AreaNode : MonoBehaviour
         
 
         // add the wire to wire container in world
-        Wire.transform.parent = GameObject.FindGameObjectWithTag("WireContainer").transform;
+        Wire.transform.SetParent(GameObject.FindGameObjectWithTag("WireContainer").transform);
         
         // add wire to array
         AllWires.Add(Wire);
@@ -162,7 +162,7 @@ public class AreaNode : MonoBehaviour
     }
 
 
-    void ToggleNode()
+    public bool ToggleNode()
     {
         if (isOn)
         {
@@ -172,6 +172,8 @@ public class AreaNode : MonoBehaviour
         {
             TurnOn();
         }
+
+        return isOn;
     }
 
 

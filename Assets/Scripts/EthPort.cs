@@ -32,7 +32,7 @@ public class EthPort : MonoBehaviour
         Wire.SetPosition(Wire.positionCount - 1, B_end.transform.position);
 
         // add the wire to wire container in world
-        Wire.transform.parent = GameObject.FindGameObjectWithTag("WireContainer").transform;
+        Wire.transform.SetParent(GameObject.FindGameObjectWithTag("WireContainer").transform);
         
 
         // add 
